@@ -85,19 +85,12 @@ function setupEventListeners() {
 async function initializeExtension() {
     console.log('Initializing My Extension');
     
-    // Create a container for the extension settings if it doesn't exist
-    if ($('#my_extension_container').length === 0) {
-        // Add container to the extensions menu or a suitable location
-        const containerHtml = `<div id="my_extension_container" style="margin: 10px 0;"></div>`;
-        $('#extensions_settings2, #extensions_settings, .extensions_info, body').last().append(containerHtml);
-    }
-    
     // Load extension settings
     loadSettings();
     
     // Add settings UI to the extensions panel
     const settingsHtml = await renderExtensionTemplateAsync(MODULE_NAME, 'settings');
-    $('#my_extension_container').html(settingsHtml);
+    $('#extensions_settings2').append(settingsHtml);
     
     // Setup event listeners
     setupEventListeners();
@@ -107,6 +100,13 @@ async function initializeExtension() {
 
 // Extension entry point - called when the extension is loaded
 jQuery(async function () {
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+        await new Promise(resolve => {
+            document.addEventListener('DOMContentLoaded', resolve);
+        });
+    }
+    
     // Wait for SillyTavern to be fully loaded
     await initializeExtension();
     
