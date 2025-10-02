@@ -1,0 +1,12 @@
+{
+    "display_name": "My Extension",
+    "loading_order": 50,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "You",
+    "version": "1.0.0",
+    "homePage": "https://github.com/yourusername/my-extension",
+    "description": "A basic SillyTavern extension with placeholder settings."
+}

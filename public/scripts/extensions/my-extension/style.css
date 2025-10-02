@@ -1,0 +1,68 @@
+/* My Extension Styles */
+
+.my-extension-container {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--SmartThemeBodyColor);
+}
+
+.my-extension-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--SmartThemeQuoteColor);
+    border-bottom: 1px solid var(--SmartThemeBorderColor);
+    padding-bottom: 5px;
+}
+
+.my-extension-setting {
+    margin: 10px 0;
+    padding: 5px;
+}
+
+.my-extension-setting label {
+    display: inline-block;
+    min-width: 150px;
+    margin-right: 10px;
+    font-weight: 500;
+    color: var(--SmartThemeQuoteColor);
+}
+
+.my-extension-setting input[type="text"],
+.my-extension-setting input[type="number"] {
+    padding: 5px;
+    border: 1px solid var(--SmartThemeBorderColor);
+    border-radius: 3px;
+    background-color: var(--SmartThemeEmColor);
+    color: var(--SmartThemeQuoteColor);
+    min-width: 200px;
+}
+
+.my-extension-setting input[type="checkbox"] {
+    margin-left: 10px;
+    transform: scale(1.2);
+}
+
+.my-extension-description {
+    font-size: 12px;
+    color: var(--grey70);
+    font-style: italic;
+    margin-top: 3px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .my-extension-setting label {
+        display: block;
+        min-width: auto;
+        margin-bottom: 5px;
+    }
+    
+    .my-extension-setting input[type="text"],
+    .my-extension-setting input[type="number"] {
+        width: 100%;
+        min-width: auto;
+    }
+}
