@@ -1,117 +1,44 @@
-import { 
-    extension_settings, 
-    renderExtensionTemplateAsync,
-    saveSettingsDebounced 
-} from '../../extensions.js';
+// My Extension - A simple SillyTavern extension
+console.log('My Extension: Script started loading');
 
-import { 
-    eventSource, 
-    event_types 
-} from '../../../script.js';
-
-// Extension module name - should match the directory name
-const MODULE_NAME = 'my-extension';
-
-// Default settings for the extension
-const defaultSettings = {
-    enabled: true,
-    exampleSetting: 'default value',
-    numberSetting: 42,
-    booleanSetting: false
-};
-
-// Load extension settings
-function loadSettings() {
-    // Initialize settings if they don't exist
-    if (!extension_settings[MODULE_NAME]) {
-        extension_settings[MODULE_NAME] = {};
-    }
-
-    // Merge with default settings
-    Object.assign(extension_settings[MODULE_NAME], defaultSettings, extension_settings[MODULE_NAME]);
-
-    // Update UI elements with current settings
-    updateUIFromSettings();
-}
-
-// Update UI elements based on current settings
-function updateUIFromSettings() {
-    const settings = extension_settings[MODULE_NAME];
+// Test basic functionality
+(function() {
+    console.log('My Extension: IIFE executed');
     
-    $('#my_extension_enabled').prop('checked', settings.enabled);
-    $('#my_extension_example_setting').val(settings.exampleSetting);
-    $('#my_extension_number_setting').val(settings.numberSetting);
-    $('#my_extension_boolean_setting').prop('checked', settings.booleanSetting);
-}
+    // Try to add a simple element to test if we can modify the DOM
+    jQuery(document).ready(function() {
+        console.log('My Extension: Document ready');
+        
+        // Add a simple test element to extensions_settings2
+        const testHtml = `
+            <div id="my-extension-test" style="padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9;">
+                <h4>🎉 My Extension is Working!</h4>
+                <p>This confirms the extension is loading and can modify the DOM.</p>
+                <p>Extension status: <span style="color: green; font-weight: bold;">ACTIVE</span></p>
+                <button onclick="alert('My Extension button clicked!')" style="padding: 5px 10px; margin: 5px 0;">Test Button</button>
+            </div>
+        `;
+        
+        // Try multiple selectors to find the right place to inject
+        const targets = ['#extensions_settings2', '#extensions_settings', '.extensions_block'];
+        let injected = false;
+        
+        for (const target of targets) {
+            if ($(target).length > 0) {
+                console.log(`My Extension: Found target ${target}, injecting UI`);
+                $(target).append(testHtml);
+                injected = true;
+                break;
+            }
+        }
+        
+        if (!injected) {
+            console.log('My Extension: No suitable target found, trying body');
+            $('body').append(`<div style="position: fixed; top: 10px; right: 10px; z-index: 9999;">${testHtml}</div>`);
+        }
+        
+        console.log('My Extension: UI injection complete');
+    });
+})();
 
-// Event handlers for settings changes
-function onEnabledChanged() {
-    const value = $('#my_extension_enabled').prop('checked');
-    extension_settings[MODULE_NAME].enabled = value;
-    saveSettingsDebounced();
-    console.log('My Extension enabled:', value);
-}
-
-function onExampleSettingChanged() {
-    const value = $('#my_extension_example_setting').val();
-    extension_settings[MODULE_NAME].exampleSetting = value;
-    saveSettingsDebounced();
-    console.log('My Extension example setting:', value);
-}
-
-function onNumberSettingChanged() {
-    const value = parseInt($('#my_extension_number_setting').val()) || 0;
-    extension_settings[MODULE_NAME].numberSetting = value;
-    saveSettingsDebounced();
-    console.log('My Extension number setting:', value);
-}
-
-function onBooleanSettingChanged() {
-    const value = $('#my_extension_boolean_setting').prop('checked');
-    extension_settings[MODULE_NAME].booleanSetting = value;
-    saveSettingsDebounced();
-    console.log('My Extension boolean setting:', value);
-}
-
-// Setup event listeners
-function setupEventListeners() {
-    $('#my_extension_enabled').on('change', onEnabledChanged);
-    $('#my_extension_example_setting').on('input', onExampleSettingChanged);
-    $('#my_extension_number_setting').on('input', onNumberSettingChanged);
-    $('#my_extension_boolean_setting').on('change', onBooleanSettingChanged);
-}
-
-// Initialize extension
-async function initializeExtension() {
-    console.log('Initializing My Extension');
-    
-    // Load extension settings
-    loadSettings();
-    
-    // Add settings UI to the extensions panel
-    const settingsHtml = await renderExtensionTemplateAsync(MODULE_NAME, 'settings');
-    $('#extensions_settings2').append(settingsHtml);
-    
-    // Setup event listeners
-    setupEventListeners();
-    
-    console.log('My Extension initialized successfully');
-}
-
-// Extension entry point - called when the extension is loaded
-jQuery(async function () {
-    // Wait for DOM to be ready
-    if (document.readyState === 'loading') {
-        await new Promise(resolve => {
-            document.addEventListener('DOMContentLoaded', resolve);
-        });
-    }
-    
-    // Wait for SillyTavern to be fully loaded
-    await initializeExtension();
-    
-    // Listen for relevant events
-    eventSource.on(event_types.SETTINGS_LOADED_AFTER, loadSettings);
-    
-    console.log('My Extension loaded');
-});
+console.log('My Extension: Script finished loading');
